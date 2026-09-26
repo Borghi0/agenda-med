@@ -2,6 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.ThemeStylesIcons" parent="Theme.Material3.Dark">
         <!-- Customize your dark theme here. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="colorPrimary">@color/cinza_escuro</item>
         <item name="colorPrimaryVariant">@color/preto</item>
         <item name="colorOnPrimary">@color/preto</item>

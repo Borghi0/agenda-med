@@ -36,7 +36,7 @@ public class SobreActivity extends AppCompatActivity {
         } else{
             Toast.makeText(this,
                     R.string.nenhum_aplicativo_para_abrir_paginas_web,
-                    Toast.LENGTH_LONG);
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -56,7 +56,7 @@ public class SobreActivity extends AppCompatActivity {
         } else{
             Toast.makeText(this,
                     R.string.nenhum_aplicativo_para_enviar_um_e_mail,
-                    Toast.LENGTH_LONG);
+                    Toast.LENGTH_LONG).show();
         }
     }
 }

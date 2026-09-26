@@ -2,6 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.ThemeStylesIcons" parent="Theme.Material3.Light">
         <!-- Customize your light theme here. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="colorPrimary">@color/azul_claro</item>
         <item name="colorPrimaryVariant">@color/azul_claro_variante</item>
         <item name="colorOnPrimary">@color/preto</item>
