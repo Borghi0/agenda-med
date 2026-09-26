@@ -26,8 +26,12 @@
     <string name="foi_clicado">\"\nfoi clicado!</string>
     <string name="icone_do_app">Ícone do app</string>
     <string name="descricao">Agenda de Medicamentos</string>
-    <string name="autoria">Autor: João Pedro Trevisan Borghi</string>
+    <string name="autoria">Autor: <a href = "https://borghi0.github.io/cv/">João Pedro Trevisan Borghi</a></string>
     <string name="sobre">Sobre</string>
     <string name="controle_de_medicamentos">Controle de medicamentos</string>
     <string name="adicionar">Adicionar</string>
+    <string name="github">https://github.com/Borghi0/agenda-med</string>
+    <string name="e_mail_autor">joaopborghi@gmail.com</string>
+    <string name="nenhum_aplicativo_para_abrir_paginas_web">Nenhum aplicativo para abrir páginas web</string>
+    <string name="nenhum_aplicativo_para_enviar_um_e_mail">Nenhum aplicativo para enviar um e-mail</string>
 </resources>
