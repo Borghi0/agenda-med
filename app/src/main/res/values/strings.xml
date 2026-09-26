@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Agenda de Medicamentos</string>
+    <string name="entradas_apagadas">Entradas apagadas!</string>
+    <string name="nome_em_branco">Nome em branco!</string>
+    <string name="selecione_o_tipo">Selecione o tipo!</string>
+    <string name="nome">"Nome: "</string>
+    <string name="tipo">"Tipo: "</string>
+    <string name="uso_continuo">Uso contínuo</string>
+    <string name="nome_do_medicamento">Nome do Medicamento</string>
+    <string name="salvar">Salvar</string>
+    <string name="limpar">Limpar</string>
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
+    <string name="capsula">Cápsula</string>
+    <string name="comprimido">Comprimido</string>
+    <string name="liquido">Líquido</string>
+    <string name="via_de_administracao">"Via de Administração: "</string>
+    <string name="oral">Oral</string>
+    <string name="sublingual">Sublingual</string>
+    <string name="inalatoria">Inalatória</string>
+    <string name="topica">Tópica</string>
+    <string name="erro_nos_valores_do_spinner">Erro nos valores do spinner</string>
+    <string name="via_incompativel_com_o_tipo_selecionado">Via incompatível com o tipo selecionado</string>
+    <string name="uso_nao_continuo">Uso não contínuo</string>
+    <string name="medicamento_de_nome">Medicamento de nome \"</string>
+    <string name="foi_clicado">\"\nfoi clicado!</string>
+    <string name="icone_do_app">Ícone do app</string>
+    <string name="descricao">Agenda de Medicamentos</string>
+    <string name="autoria">Autor: João Pedro Trevisan Borghi</string>
+    <string name="sobre">Sobre</string>
+    <string name="controle_de_medicamentos">Controle de medicamentos</string>
+    <string name="adicionar">Adicionar</string>
+</resources>

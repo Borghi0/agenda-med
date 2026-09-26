@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="vias">
+        <item>@string/oral</item>
+        <item>@string/sublingual</item>
+        <item>@string/inalatoria</item>
+        <item>@string/topica</item>
+    </string-array>
+
+    <string-array name="medicamentos_nome">
+        <item>Paracetamol</item>
+        <item>Dipirona</item>
+        <item>Omeprazol</item>
+        <item>Loratadina</item>
+        <item>Amoxicilina</item>
+        <item>Salbutamol</item>
+        <item>Nitroglicerina</item>
+        <item>Hidrocortisona</item>
+        <item>Losartana</item>
+        <item>Metformina</item>
+    </string-array>
+
+    <integer-array name="medicamentos_tipo">
+        <item>1</item>
+        <item>1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>0</item>
+        <item>2</item>
+        <item>1</item>
+        <item>2</item>
+        <item>1</item>
+        <item>1</item>
+    </integer-array>
+
+    <integer-array name="medicamentos_via">
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>2</item>
+        <item>1</item>
+        <item>3</item>
+        <item>0</item>
+        <item>0</item>
+    </integer-array>
+
+    <integer-array name="medicamentos_uso_continuo">
+        <item>0</item>
+        <item>0</item>
+        <item>1</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>1</item>
+        <item>1</item>
+    </integer-array>
+
+</resources>

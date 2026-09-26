@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.ThemeStylesIcons" parent="Theme.Material3.Light">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/azul_claro</item>
+        <item name="colorPrimaryVariant">@color/azul_claro_variante</item>
+        <item name="colorOnPrimary">@color/preto</item>
+    </style>
+</resources>
