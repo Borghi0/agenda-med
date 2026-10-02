@@ -2,6 +2,8 @@ package br.edu.utfpr.joaoborghi.agendamed;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,6 +14,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -66,7 +69,7 @@ public class MedicamentosActivity extends AppCompatActivity {
         listViewMedicamentos.setAdapter(medicamentoAdapter);
     }
 
-    public void abrirSobre(View view){
+    public void abrirSobre(){
         Intent intentAbertura = new Intent(this, SobreActivity.class);
 
         startActivity(intentAbertura);
@@ -96,9 +99,30 @@ public class MedicamentosActivity extends AppCompatActivity {
                     }
                 }
             });
-    public void abrirNovoMedicamento(View view){
+    public void abrirNovoMedicamento(){
         Intent intentAbertura = new Intent(this, MedicamentoActivity.class);
 
         launcherNovoMedicamento.launch(intentAbertura);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.medicamentos_opcoes, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int idMenuItem = item.getItemId();
+
+        if(idMenuItem == R.id.menuItemAdicionar){
+            abrirNovoMedicamento();
+            return true;
+        }else if(idMenuItem == R.id.menuItemSobre){
+            abrirSobre();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }

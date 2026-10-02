@@ -2,6 +2,8 @@ package br.edu.utfpr.joaoborghi.agendamed;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -10,6 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -36,7 +39,7 @@ public class MedicamentoActivity extends AppCompatActivity {
         checkBoxContinuo = findViewById(R.id.checkBoxContinuo);
     }
 
-    public void limpar(View view){
+    public void limpar(){
         editTextNome.setText(null);
         radioGroupTipo.clearCheck();
         spinnerVia.setSelection(0);
@@ -47,7 +50,7 @@ public class MedicamentoActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.entradas_apagadas, Toast.LENGTH_SHORT).show();
     }
 
-    public void salvar(View view){
+    public void salvar(){
         String nome = editTextNome.getText().toString();
 
         if(nome==null || nome.trim().isEmpty()){
@@ -105,5 +108,26 @@ public class MedicamentoActivity extends AppCompatActivity {
         } else if(tipo==TipoMedicamento.Liquido){
             return via>=0 && via<=3;
         } else return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.medicamento_opcoes, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int idMenuItem = item.getItemId();
+
+        if(idMenuItem == R.id.menuItemSalvar){
+            salvar();
+            return true;
+        } else if(idMenuItem==R.id.menuItemLimpar){
+            limpar();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }
