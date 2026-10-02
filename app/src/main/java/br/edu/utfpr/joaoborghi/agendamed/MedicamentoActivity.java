@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -22,10 +22,18 @@ public class MedicamentoActivity extends AppCompatActivity {
     public static final String KEY_TIPO = "KEY_TIPO";
     public static final String KEY_VIA = "KEY_VIA";
     public static final String KEY_CONTINUO = "KEY_CONTINUO";
+    public static final String KEY_MODO = "MODO";
+
+    public static final int MODO_NOVO = 0;
+    public static final int MODO_EDITAR = 1;
+
     private EditText editTextNome;
     private RadioGroup radioGroupTipo;
+    private RadioButton radioButtonCapsula, radioButtonComprimido, radioButtonLiquido;
     private Spinner spinnerVia;
     private CheckBox checkBoxContinuo;
+
+    private int modo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +43,43 @@ public class MedicamentoActivity extends AppCompatActivity {
 
         editTextNome = findViewById(R.id.editTextNome);
         radioGroupTipo = findViewById(R.id.radioGroupTipo);
+        radioButtonCapsula = findViewById(R.id.radioButtonCapsula);
+        radioButtonComprimido = findViewById(R.id.radioButtonComprimido);
+        radioButtonLiquido = findViewById(R.id.radioButtonLiquido);
         spinnerVia = findViewById(R.id.spinnerVia);
         checkBoxContinuo = findViewById(R.id.checkBoxContinuo);
+
+        Intent intentAbertura = getIntent();
+
+        Bundle bundle = intentAbertura.getExtras();
+
+        if(bundle!=null){
+            modo = bundle.getInt(KEY_MODO);
+
+            if(modo==MODO_NOVO){
+                setTitle(getString(R.string.novo_medicamento));
+            } else{
+                setTitle(getString(R.string.editar_medicamento));
+
+                String nome = bundle.getString(MedicamentoActivity.KEY_NOME);
+                String tipo = bundle.getString(MedicamentoActivity.KEY_TIPO);
+                int via = bundle.getInt(MedicamentoActivity.KEY_VIA);
+                boolean continuo = bundle.getBoolean(MedicamentoActivity.KEY_CONTINUO);
+
+                TipoMedicamento tipoMedicamento = TipoMedicamento.valueOf(tipo);
+
+                editTextNome.setText(nome);
+                if(tipoMedicamento==TipoMedicamento.Capsula){
+                    radioButtonCapsula.setChecked(true);
+                } else if (tipoMedicamento==TipoMedicamento.Comprimido){
+                    radioButtonComprimido.setChecked(true);
+                } else{
+                    radioButtonLiquido.setChecked(true);
+                }
+                spinnerVia.setSelection(via);
+                checkBoxContinuo.setChecked(continuo);
+            }
+        }
     }
 
     public void limpar(){

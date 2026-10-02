@@ -34,4 +34,8 @@
     <string name="e_mail_autor">joaopborghi@gmail.com</string>
     <string name="nenhum_aplicativo_para_abrir_paginas_web">Nenhum aplicativo para abrir páginas web</string>
     <string name="nenhum_aplicativo_para_enviar_um_e_mail">Nenhum aplicativo para enviar um e-mail</string>
+    <string name="editar">Editar</string>
+    <string name="excluir">Excluir</string>
+    <string name="novo_medicamento">Novo Medicamento</string>
+    <string name="editar_medicamento">Editar Medicamento</string>
 </resources>
