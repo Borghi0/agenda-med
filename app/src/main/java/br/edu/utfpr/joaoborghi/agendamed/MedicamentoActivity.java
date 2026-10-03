@@ -34,6 +34,7 @@ public class MedicamentoActivity extends AppCompatActivity {
     private CheckBox checkBoxContinuo;
 
     private int modo;
+    private Medicamento medicamentoOriginal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,8 @@ public class MedicamentoActivity extends AppCompatActivity {
                 boolean continuo = bundle.getBoolean(MedicamentoActivity.KEY_CONTINUO);
 
                 TipoMedicamento tipoMedicamento = TipoMedicamento.valueOf(tipo);
+
+                medicamentoOriginal = new Medicamento(nome, tipoMedicamento, via, continuo);
 
                 editTextNome.setText(nome);
                 if(tipoMedicamento==TipoMedicamento.Capsula){
@@ -129,6 +132,17 @@ public class MedicamentoActivity extends AppCompatActivity {
         }
 
         boolean continuo = checkBoxContinuo.isChecked();
+
+        if(modo==MODO_EDITAR &&
+                nome.equalsIgnoreCase(medicamentoOriginal.getNome()) &&
+                tipoMedicamento==medicamentoOriginal.getTipo() &&
+                via == medicamentoOriginal.getVia() &&
+                continuo == medicamentoOriginal.isUsoContinuo()
+        ){
+            setResult(MedicamentoActivity.RESULT_CANCELED);
+            finish();
+            return;
+        }
 
         Intent intentResposta = new Intent();
 

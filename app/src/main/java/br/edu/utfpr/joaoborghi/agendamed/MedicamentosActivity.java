@@ -1,14 +1,14 @@
 package br.edu.utfpr.joaoborghi.agendamed;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -16,6 +16,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,51 @@ public class MedicamentosActivity extends AppCompatActivity {
     private MedicamentoAdapter medicamentoAdapter;
 
     private int posicaoSelecionada = -1;
+
+    private ActionMode actionMode;
+
+    private View viewSelecionada;
+    private Drawable backgroundDrawable;
+
+    private ActionMode.Callback callback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.medicamentos_item_selecionado, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            int idMenuItem = item.getItemId();
+
+            if(idMenuItem==R.id.menuItemEditar){
+                editarMedicamento();
+                return true;
+            } else if (idMenuItem==R.id.menuItemExcluir){
+                excluirMedicamento();
+                mode.finish();
+                return true;
+            }else {
+                return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            if(viewSelecionada != null) viewSelecionada.setBackground(backgroundDrawable);
+
+            actionMode = null;
+            viewSelecionada = null;
+            backgroundDrawable = null;
+            listViewMedicamentos.setEnabled(true);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +87,28 @@ public class MedicamentosActivity extends AppCompatActivity {
         listViewMedicamentos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                editarMedicamento(i);
+                posicaoSelecionada = i;
+                editarMedicamento();
+            }
+        });
+
+        listViewMedicamentos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(actionMode!=null) return false;
+
+                posicaoSelecionada = i;
+
+                viewSelecionada = view;
+                backgroundDrawable = view.getBackground();
+
+                view.setBackgroundColor(ContextCompat.getColor(MedicamentosActivity.this, R.color.cor_item_selecionado));
+
+                listViewMedicamentos.setEnabled(false);
+
+                actionMode = startSupportActionMode(callback);
+
+                return true;
             }
         });
 
@@ -50,21 +118,7 @@ public class MedicamentosActivity extends AppCompatActivity {
     }
 
     private void popularListaMedicamentos(){
-        /*String[] medicamentosNome = getResources().getStringArray(R.array.medicamentos_nome);
-        int[] medicamentosTipo = getResources().getIntArray(R.array.medicamentos_tipo);
-        int[] medicamentosVia = getResources().getIntArray(R.array.medicamentos_via);
-        int[] medicamentosUsoContinuo = getResources().getIntArray(R.array.medicamentos_uso_continuo);*/
-
         listaMedicamentos = new ArrayList<>();
-
-        /*for(int i = 0; i<medicamentosNome.length; i++){
-            listaMedicamentos.add(new Medicamento(
-                    medicamentosNome[i],
-                    TipoMedicamento.values()[medicamentosTipo[i]],
-                    medicamentosVia[i],
-                    medicamentosUsoContinuo[i] == 1
-            ));
-        }*/
 
         medicamentoAdapter = new MedicamentoAdapter(this, listaMedicamentos);
 
@@ -156,11 +210,13 @@ public class MedicamentosActivity extends AppCompatActivity {
                         }
                     }
                     posicaoSelecionada = -1;
+
+                    if(actionMode!=null){
+                        actionMode.finish();
+                    }
                 }
             });
-    private void editarMedicamento(int posicao){
-        posicaoSelecionada = posicao;
-
+    private void editarMedicamento(){
         Medicamento medicamento = listaMedicamentos.get(posicaoSelecionada);
 
         Intent intentAbertura = new Intent(this, MedicamentoActivity.class);
@@ -175,34 +231,8 @@ public class MedicamentosActivity extends AppCompatActivity {
         launcherEditarMedicamento.launch(intentAbertura);
     }
 
-    private void excluirMedicamento(int posicao){
-        listaMedicamentos.remove(posicao);
+    private void excluirMedicamento(){
+        listaMedicamentos.remove(posicaoSelecionada);
         medicamentoAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-        getMenuInflater().inflate(R.menu.medicamentos_item_selecionado, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-
-        AdapterView.AdapterContextMenuInfo info;
-        info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        int idMenuItem = item.getItemId();
-
-        if(idMenuItem==R.id.menuItemEditar){
-            editarMedicamento(info.position);
-            return true;
-        } else if (idMenuItem==R.id.menuItemExcluir){
-            excluirMedicamento(info.position);
-            return true;
-        }else {
-            return super.onContextItemSelected(item);
-        }
     }
 }
