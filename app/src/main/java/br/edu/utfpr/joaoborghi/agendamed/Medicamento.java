@@ -1,6 +1,15 @@
 package br.edu.utfpr.joaoborghi.agendamed;
 
+import java.util.Comparator;
+
 public class Medicamento {
+    public static Comparator<Medicamento> oredenacaoCrescente = new Comparator<Medicamento>() {
+        @Override
+        public int compare(Medicamento m1, Medicamento m2) {
+            return m1.getNome().compareToIgnoreCase(m2.getNome());
+        }
+    };
+
     private String nome;
     private TipoMedicamento tipo;
     private int via;

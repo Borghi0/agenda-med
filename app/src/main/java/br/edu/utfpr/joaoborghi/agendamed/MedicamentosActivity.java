@@ -20,6 +20,7 @@ import androidx.appcompat.view.ActionMode;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MedicamentosActivity extends AppCompatActivity {
@@ -150,6 +151,8 @@ public class MedicamentosActivity extends AppCompatActivity {
 
                             listaMedicamentos.add(medicamento);
 
+                            Collections.sort(listaMedicamentos, Medicamento.oredenacaoCrescente);
+
                             medicamentoAdapter.notifyDataSetChanged();
                         }
                     }
@@ -205,6 +208,8 @@ public class MedicamentosActivity extends AppCompatActivity {
                             medicamento.setTipo(TipoMedicamento.valueOf(tipo));
                             medicamento.setVia(via);
                             medicamento.setUsoContinuo(continuo);
+
+                            Collections.sort(listaMedicamentos, Medicamento.oredenacaoCrescente);
 
                             medicamentoAdapter.notifyDataSetChanged();
                         }
