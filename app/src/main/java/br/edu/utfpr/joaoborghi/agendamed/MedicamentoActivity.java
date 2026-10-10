@@ -1,6 +1,8 @@
 package br.edu.utfpr.joaoborghi.agendamed;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +26,9 @@ public class MedicamentoActivity extends AppCompatActivity {
     public static final String KEY_CONTINUO = "KEY_CONTINUO";
     public static final String KEY_MODO = "MODO";
 
+    public static final String KEY_SUGERIR_VIA = "SUGERIR_VIA";
+    public static final String KEY_ULTIMA_VIA = "ULTIMA_VIA";
+
     public static final int MODO_NOVO = 0;
     public static final int MODO_EDITAR = 1;
 
@@ -35,6 +40,9 @@ public class MedicamentoActivity extends AppCompatActivity {
 
     private int modo;
     private Medicamento medicamentoOriginal;
+
+    private boolean sugerirVia = false;
+    private int ultimaVia = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +58,8 @@ public class MedicamentoActivity extends AppCompatActivity {
         spinnerVia = findViewById(R.id.spinnerVia);
         checkBoxContinuo = findViewById(R.id.checkBoxContinuo);
 
+        lerPreferencias();
+
         Intent intentAbertura = getIntent();
 
         Bundle bundle = intentAbertura.getExtras();
@@ -59,6 +69,11 @@ public class MedicamentoActivity extends AppCompatActivity {
 
             if(modo==MODO_NOVO){
                 setTitle(getString(R.string.novo_medicamento));
+
+                if(sugerirVia){
+                    spinnerVia.setSelection(ultimaVia);
+                }
+
             } else{
                 setTitle(getString(R.string.editar_medicamento));
 
@@ -144,6 +159,8 @@ public class MedicamentoActivity extends AppCompatActivity {
             return;
         }
 
+        salvarUltimaVia(via);
+
         Intent intentResposta = new Intent();
 
         intentResposta.putExtra(KEY_NOME, nome);
@@ -174,6 +191,14 @@ public class MedicamentoActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.menuItemSugerirVia);
+        menuItem.setChecked(sugerirVia);
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int idMenuItem = item.getItemId();
 
@@ -183,8 +208,49 @@ public class MedicamentoActivity extends AppCompatActivity {
         } else if(idMenuItem==R.id.menuItemLimpar){
             limpar();
             return true;
+        } else if(idMenuItem==R.id.menuItemSugerirVia) {
+            boolean valor = !item.isChecked();
+            salvarSugerirVia(valor);
+            item.setChecked(valor);
+
+            if(sugerirVia){
+                spinnerVia.setSelection(ultimaVia);
+            }
+
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void lerPreferencias(){
+        SharedPreferences sharedPreferences = getSharedPreferences(MedicamentosActivity.ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+
+        sugerirVia = sharedPreferences.getBoolean(KEY_SUGERIR_VIA, sugerirVia);
+        ultimaVia = sharedPreferences.getInt(KEY_ULTIMA_VIA, ultimaVia);
+    }
+
+    private void salvarSugerirVia(boolean novoValor){
+        SharedPreferences sharedPreferences = getSharedPreferences(MedicamentosActivity.ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putBoolean(KEY_SUGERIR_VIA, novoValor);
+
+        editor.commit();
+
+        sugerirVia = novoValor;
+    }
+
+    private void salvarUltimaVia(int novoValor){
+        SharedPreferences sharedPreferences = getSharedPreferences(MedicamentosActivity.ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt(KEY_ULTIMA_VIA, novoValor);
+
+        editor.commit();
+
+        ultimaVia = novoValor;
     }
 }

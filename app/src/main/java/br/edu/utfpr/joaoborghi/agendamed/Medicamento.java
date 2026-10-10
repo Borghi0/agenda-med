@@ -10,6 +10,13 @@ public class Medicamento {
         }
     };
 
+    public static Comparator<Medicamento> oredenacaoDecrescente = new Comparator<Medicamento>() {
+        @Override
+        public int compare(Medicamento m1, Medicamento m2) {
+            return -1 * m1.getNome().compareToIgnoreCase(m2.getNome());
+        }
+    };
+
     private String nome;
     private TipoMedicamento tipo;
     private int via;

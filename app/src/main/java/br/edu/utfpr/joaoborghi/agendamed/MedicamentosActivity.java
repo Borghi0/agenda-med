@@ -1,6 +1,8 @@
 package br.edu.utfpr.joaoborghi.agendamed;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -35,6 +38,15 @@ public class MedicamentosActivity extends AppCompatActivity {
 
     private View viewSelecionada;
     private Drawable backgroundDrawable;
+
+    public static final String ARQUIVO_PREFERENCIAS = "br.edu.utfpr.joaoborghi.agendamed.PREFERENCIAS";
+
+    public static final String KEY_ORDENACAO_ASCENDENTE = "ORDENACAO_ASCENDENTE";
+
+    public static final boolean PADRAO_INICIAL_ORDENACAO_ASCENDENTE = true;
+
+    private boolean ordenacaoAscendente = PADRAO_INICIAL_ORDENACAO_ASCENDENTE;
+    private MenuItem menuItemOrdenacao;
 
     private ActionMode.Callback callback = new ActionMode.Callback() {
         @Override
@@ -113,6 +125,8 @@ public class MedicamentosActivity extends AppCompatActivity {
             }
         });
 
+        lerPreferencias();
+
         popularListaMedicamentos();
 
         registerForContextMenu(listViewMedicamentos);
@@ -151,9 +165,7 @@ public class MedicamentosActivity extends AppCompatActivity {
 
                             listaMedicamentos.add(medicamento);
 
-                            Collections.sort(listaMedicamentos, Medicamento.oredenacaoCrescente);
-
-                            medicamentoAdapter.notifyDataSetChanged();
+                            ordenarLista();
                         }
                     }
                 }
@@ -170,6 +182,17 @@ public class MedicamentosActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.medicamentos_opcoes, menu);
+
+        menuItemOrdenacao = menu.findItem(R.id.menuItemOrdenacao);
+
+        return true;
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        atualizarIconeOrdenacao();
+
         return true;
     }
 
@@ -182,6 +205,19 @@ public class MedicamentosActivity extends AppCompatActivity {
             return true;
         }else if(idMenuItem == R.id.menuItemSobre){
             abrirSobre();
+            return true;
+        } else if(idMenuItem == R.id.menuItemOrdenacao){
+            salvarPreferenciaOrdenacao(!ordenacaoAscendente);
+            atualizarIconeOrdenacao();
+            ordenarLista();
+            return true;
+        } else if(idMenuItem == R.id.menuItemRestaurar){
+            restaurarPadroes();
+            atualizarIconeOrdenacao();
+            ordenarLista();
+
+            Toast.makeText(this, R.string.as_configuracoes_foram_restauradas_para_o_padrao_de_instalacao, Toast.LENGTH_LONG).show();
+
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -209,9 +245,7 @@ public class MedicamentosActivity extends AppCompatActivity {
                             medicamento.setVia(via);
                             medicamento.setUsoContinuo(continuo);
 
-                            Collections.sort(listaMedicamentos, Medicamento.oredenacaoCrescente);
-
-                            medicamentoAdapter.notifyDataSetChanged();
+                            ordenarLista();
                         }
                     }
                     posicaoSelecionada = -1;
@@ -239,5 +273,52 @@ public class MedicamentosActivity extends AppCompatActivity {
     private void excluirMedicamento(){
         listaMedicamentos.remove(posicaoSelecionada);
         medicamentoAdapter.notifyDataSetChanged();
+    }
+
+    private void ordenarLista(){
+        if(ordenacaoAscendente){
+            Collections.sort(listaMedicamentos, Medicamento.oredenacaoCrescente);
+        } else{
+            Collections.sort(listaMedicamentos, Medicamento.oredenacaoDecrescente);
+        }
+
+        medicamentoAdapter.notifyDataSetChanged();
+    }
+
+    private void atualizarIconeOrdenacao(){
+        if(ordenacaoAscendente){
+            menuItemOrdenacao.setIcon(R.drawable.ic_action_ascending_order);
+        } else{
+            menuItemOrdenacao.setIcon(R.drawable.ic_action_descending_order);
+        }
+    }
+
+    private void lerPreferencias(){
+        SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+
+        ordenacaoAscendente = sharedPreferences.getBoolean(KEY_ORDENACAO_ASCENDENTE, ordenacaoAscendente);
+    }
+
+    private void salvarPreferenciaOrdenacao(boolean valor){
+        SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putBoolean(KEY_ORDENACAO_ASCENDENTE, valor);
+
+        editor.commit();
+
+        ordenacaoAscendente = valor;
+    }
+
+    private void restaurarPadroes(){
+        SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.clear();
+        editor.commit();
+
+        ordenacaoAscendente = PADRAO_INICIAL_ORDENACAO_ASCENDENTE;
     }
 }

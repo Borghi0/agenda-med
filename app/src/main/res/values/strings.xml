@@ -38,4 +38,8 @@
     <string name="excluir">Excluir</string>
     <string name="novo_medicamento">Novo Medicamento</string>
     <string name="editar_medicamento">Editar Medicamento</string>
+    <string name="sugerir_via">Sugerir Via</string>
+    <string name="ordenacao">Ordenação</string>
+    <string name="restaurar_padroes">Restaurar Padrões</string>
+    <string name="as_configuracoes_foram_restauradas_para_o_padrao_de_instalacao">As configurações foram restauradas para o padrão de instalação!</string>
 </resources>
