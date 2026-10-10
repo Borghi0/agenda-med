@@ -39,4 +39,5 @@
     <string name="ordenacao">Ordenação</string>
     <string name="restaurar_padroes">Restaurar Padrões</string>
     <string name="as_configuracoes_foram_restauradas_para_o_padrao_de_instalacao">As configurações foram restauradas para o padrão de instalação!</string>
+    <string name="modo_noturno">Modo Noturno</string>
 </resources>

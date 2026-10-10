@@ -13,6 +13,10 @@
         android:title="@string/ordenacao"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/menuItemModoNoturno"
+        android:checkable="true"
+        android:title="@string/modo_noturno" />
+    <item
         android:id="@+id/menuItemRestaurar"
         android:title="@string/restaurar_padroes" />
     <item

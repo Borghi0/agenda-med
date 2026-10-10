@@ -19,6 +19,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.view.ActionMode;
 import androidx.core.content.ContextCompat;
 
@@ -41,11 +42,15 @@ public class MedicamentosActivity extends AppCompatActivity {
 
     public static final String ARQUIVO_PREFERENCIAS = "br.edu.utfpr.joaoborghi.agendamed.PREFERENCIAS";
 
+    public static final String KEY_MODO_NOTURNO = "MODO_NOTURNO";
     public static final String KEY_ORDENACAO_ASCENDENTE = "ORDENACAO_ASCENDENTE";
 
+    public static final boolean PADRAO_INICIAL_MODO_NOTURNO = false;
     public static final boolean PADRAO_INICIAL_ORDENACAO_ASCENDENTE = true;
 
+    private boolean modoNoturno = PADRAO_INICIAL_MODO_NOTURNO;
     private boolean ordenacaoAscendente = PADRAO_INICIAL_ORDENACAO_ASCENDENTE;
+
     private MenuItem menuItemOrdenacao;
 
     private ActionMode.Callback callback = new ActionMode.Callback() {
@@ -126,6 +131,7 @@ public class MedicamentosActivity extends AppCompatActivity {
         });
 
         lerPreferencias();
+        atualizarTema();
 
         popularListaMedicamentos();
 
@@ -191,6 +197,9 @@ public class MedicamentosActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.menuItemModoNoturno);
+        menuItem.setChecked(modoNoturno);
+
         atualizarIconeOrdenacao();
 
         return true;
@@ -203,14 +212,27 @@ public class MedicamentosActivity extends AppCompatActivity {
         if(idMenuItem == R.id.menuItemAdicionar){
             abrirNovoMedicamento();
             return true;
+
         }else if(idMenuItem == R.id.menuItemSobre){
             abrirSobre();
             return true;
+
+        }  else if(idMenuItem == R.id.menuItemModoNoturno){
+            boolean valor = !item.isChecked();
+            salvarPreferenciaModoNoturno(valor);
+            item.setChecked(valor);
+
+            atualizarTema();
+
+            return true;
+
         } else if(idMenuItem == R.id.menuItemOrdenacao){
             salvarPreferenciaOrdenacao(!ordenacaoAscendente);
             atualizarIconeOrdenacao();
             ordenarLista();
+
             return true;
+
         } else if(idMenuItem == R.id.menuItemRestaurar){
             restaurarPadroes();
             atualizarIconeOrdenacao();
@@ -219,6 +241,7 @@ public class MedicamentosActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.as_configuracoes_foram_restauradas_para_o_padrao_de_instalacao, Toast.LENGTH_LONG).show();
 
             return true;
+
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -275,6 +298,14 @@ public class MedicamentosActivity extends AppCompatActivity {
         medicamentoAdapter.notifyDataSetChanged();
     }
 
+    private void atualizarTema(){
+        if(modoNoturno){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
     private void ordenarLista(){
         if(ordenacaoAscendente){
             Collections.sort(listaMedicamentos, Medicamento.oredenacaoCrescente);
@@ -296,7 +327,20 @@ public class MedicamentosActivity extends AppCompatActivity {
     private void lerPreferencias(){
         SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
 
+        modoNoturno = sharedPreferences.getBoolean(KEY_MODO_NOTURNO, modoNoturno);
         ordenacaoAscendente = sharedPreferences.getBoolean(KEY_ORDENACAO_ASCENDENTE, ordenacaoAscendente);
+    }
+
+    private void salvarPreferenciaModoNoturno(boolean valor){
+        SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_PREFERENCIAS, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putBoolean(KEY_MODO_NOTURNO, valor);
+
+        editor.commit();
+
+        modoNoturno = valor;
     }
 
     private void salvarPreferenciaOrdenacao(boolean valor){
@@ -319,6 +363,8 @@ public class MedicamentosActivity extends AppCompatActivity {
         editor.clear();
         editor.commit();
 
+        modoNoturno = PADRAO_INICIAL_MODO_NOTURNO;
+        atualizarTema();
         ordenacaoAscendente = PADRAO_INICIAL_ORDENACAO_ASCENDENTE;
     }
 }

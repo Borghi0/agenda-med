@@ -40,4 +40,5 @@
     <string name="as_configuracoes_foram_restauradas_para_o_padrao_de_instalacao">Settings have been restored to installation defaults!</string>
     <string name="app_name">MedSchedule</string>
     <string name="descricao">Medication Schedule</string>
+    <string name="modo_noturno">Dark Mode</string>
 </resources>
